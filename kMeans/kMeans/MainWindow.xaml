@@ -1,0 +1,26 @@
+﻿<Window x:Class="kMeans.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:kMeans"
+        xmlns:viewModel="clr-namespace:kMeans.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="600" MinWidth="800">
+    <Window.DataContext>
+        <viewModel:WindowViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Canvas Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Canvas>
+        <TextBlock Grid.Column="1" Text="Points count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 20"></TextBlock>
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5, 40"></TextBox>
+        <TextBlock Grid.Column="1" Text="Class count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 65"></TextBlock>
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5, 85"></TextBox>
+        <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Content="Calculate"></Button>
+    </Grid>
+</Window>
+

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using kMeans.Model;
 
 namespace kMeans.ViewModel
@@ -83,8 +84,8 @@ namespace kMeans.ViewModel
             }
         }
 
-        private Image image;
-        public Image ImageSource
+        private ImageSource image;
+        public ImageSource ImageSource
         {
             get
             {

@@ -1,16 +1,22 @@
-﻿using System.Diagnostics;
+﻿using System.Windows.Controls;
 
 namespace kMeans.ViewModel
 {
     public class WindowViewModel: BaseViewModel
     {
-        private double height;
-        public double CanvasHeight
+
+
+        private Image image;
+        public Image ImageSource
         {
-            get { return height; }
+            get
+            {
+                return image;
+            }
             set
             {
-                Debug.WriteLine(value);
+                image = value;
+                OnPropertyChanged();
             }
         }
     }

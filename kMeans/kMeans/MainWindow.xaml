@@ -15,7 +15,7 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Canvas Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="600" MinWidth="570" Height="{Binding CanvasHeight, Mode=OneWayToSource}"></Canvas>
+        <Image Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="600" MinWidth="570" Source="{Binding ImageSource}"></Image>
         <TextBlock Grid.Column="1" Text="Points count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 20"></TextBlock>
         <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5, 40"></TextBox>
         <TextBlock Grid.Column="1" Text="Class count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 65"></TextBlock>

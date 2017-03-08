@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using kMeans.Model;
 
 namespace kMeans.ViewModel
 {
@@ -8,14 +9,17 @@ namespace kMeans.ViewModel
 
         public WindowViewModel()
         {
-            IsAnError = false;
+            IsEnableToPress = true;
             ExecuteTask = new Command((() =>
             {
-                IsAnError = false;
                 if (!ConvertCheckingWrite())
-                {
+                { 
                     return;
                 }
+                IsEnableToPress = false;
+                var model = new PointsModel(pointsCountNum, classCountNum);
+                model.Execute();
+                IsEnableToPress = true;
             }));
         }
 
@@ -97,8 +101,39 @@ namespace kMeans.ViewModel
         public ICommand ExecuteTask { get; private set; }
 
 
-        private uint classCountNum;
-        private uint pointsCountNum;
+        private int classCountNum;
+        private int pointsCountNum;
+
+        private bool isWorking;
+
+        public bool IsWorking
+        {
+            get
+            {
+                return isWorking;
+                
+            }
+            set
+            {
+                isWorking = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isEnableToPress;
+
+        public bool IsEnableToPress
+        {
+            get
+            {
+                return isEnableToPress; 
+            }
+            set
+            {
+                isEnableToPress = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool ConvertCheckingWrite()
         {
@@ -111,9 +146,9 @@ namespace kMeans.ViewModel
         }
 
 
-        private bool CheckWriteValue(string fieldValue,out uint fieldNumValue, string errorMessage)
+        private bool CheckWriteValue(string fieldValue,out int fieldNumValue, string errorMessage)
         {
-            if (!uint.TryParse(fieldValue, out fieldNumValue))
+            if (!int.TryParse(fieldValue, out fieldNumValue))
             {
                 ErrorString = errorMessage;
                 IsAnError = true;

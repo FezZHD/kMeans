@@ -18,12 +18,13 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="600" MinWidth="570" Source="{Binding ImageSource}"></Image>
+        <Image Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="600"  MinWidth="570" Source="{Binding ImageSource}"></Image>
         <TextBlock Grid.Column="1" Text="Points count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 20"></TextBlock>
         <TextBox Text="{Binding PointsCount}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5, 40"></TextBox>
         <TextBlock Grid.Column="1" Text="Class count" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 65"></TextBlock>
         <TextBox Text="{Binding ClassCount}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5, 85"></TextBox>
-        <Button Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Content="Calculate" Command="{Binding ExecuteTask}"></Button>
+        <Button Grid.Column="1" IsEnabled="{Binding IsEnableToPress}" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Content="Calculate" Command="{Binding ExecuteTask}"></Button>
+        <ProgressBar Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0, 25" Height="10" IsIndeterminate="{Binding IsWorking}"></ProgressBar>
         <TextBlock Grid.Column="1" Visibility="{Binding IsAnError, Converter={StaticResource EnumConverter}}" Text="{Binding ErrorString}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5, 120" Foreground="Red"></TextBlock>
     </Grid>
 </Window>

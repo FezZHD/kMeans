@@ -1,6 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using kMeans.Model;
 
 namespace kMeans.ViewModel
@@ -11,16 +15,27 @@ namespace kMeans.ViewModel
         public WindowViewModel()
         {
             IsEnableToPress = true;
-            ExecuteTask = new Command((() =>
+            ExecuteTask = new Command((async () =>
             {
                 if (!ConvertCheckingWrite())
                 { 
                     return;
                 }
+                IsWorking = true;
                 IsEnableToPress = false;
-                var model = new PointsModel(pointsCountNum, classCountNum);
-                model.Execute();
+                List<ClassModel> list = new List<ClassModel>();
+                await Task.Run(() => 
+                {
+                    var model = new PointsModel(pointsCountNum, classCountNum);
+                    list = model.Execute();
+                });
+                ImageSource = Draw(list);
                 IsEnableToPress = true;
+                IsWorking = false;
+
+
+
+
             }));
         }
 
@@ -156,6 +171,36 @@ namespace kMeans.ViewModel
                 return false;
             }
             return true;
+        }
+
+
+        private ImageSource Draw(List<ClassModel> classes)
+        {
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(1000, 1000, 120, 96, PixelFormats.Default);
+            DrawingVisual drawing = new DrawingVisual();
+            DrawingContext drawingContext = drawing.RenderOpen();
+            foreach (var currentClass in classes)
+            {
+                var brush = new SolidColorBrush(currentClass.ClassColor);
+                var pen = new Pen(brush, 3);
+                pen.Freeze();
+                brush.Freeze();
+                DrawPoints(currentClass.ClassPoints, pen, brush, drawingContext, currentClass.CentralPoints);
+            }
+            drawingContext.Close();
+            bitmap.Clear();
+            bitmap.Render(drawing);
+            return bitmap;
+        }
+
+
+        private void DrawPoints(List<Points> points, Pen pen, Brush brush, DrawingContext context, Points center)
+        {
+            foreach (var point in points)
+            {
+                context.DrawEllipse(brush, pen, new Point(point.XPoint, point.YPoint), 3, 3 );
+            }
+            context.DrawEllipse(new SolidColorBrush(), new Pen(new SolidColorBrush(Colors.Black) ,7), new Point(center.XPoint, center.YPoint), 7, 7);
         }
     }
 }

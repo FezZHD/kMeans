@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace kMeans
@@ -6,9 +7,9 @@ namespace kMeans
     public class Command:ICommand
     {
 
-        private Action command;
+        private Func<Task> command;
 
-        public Command(Action action)
+        public Command(Func<Task> action)
         {
             command = action;
         }
@@ -18,9 +19,15 @@ namespace kMeans
             return true;
         }
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            command.Invoke();
+            await ExecuteAsync();
+        }
+
+
+        private Task ExecuteAsync()
+        {
+            return command();
         }
 
         public event EventHandler CanExecuteChanged;

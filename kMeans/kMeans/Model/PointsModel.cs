@@ -36,9 +36,9 @@ namespace kMeans.Model
         }
 
 
-        internal void Execute()
+        internal List<ClassModel> Execute()
         {
-            var list = RandomStartPoint();
+            return RandomStartPoint();
         }
 
 

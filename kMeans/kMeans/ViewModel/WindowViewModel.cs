@@ -29,13 +29,10 @@ namespace kMeans.ViewModel
                     var model = new PointsModel(pointsCountNum, classCountNum);
                     list = model.Execute();
                 });
-                ImageSource = Draw(list);
+                await Task.Delay(1000);
+                ImageSource = await Task.FromResult(Draw(list));
                 IsEnableToPress = true;
                 IsWorking = false;
-
-
-
-
             }));
         }
 

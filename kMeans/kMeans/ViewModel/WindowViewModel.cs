@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using kMeans.Model;
 
 namespace kMeans.ViewModel
@@ -23,19 +24,21 @@ namespace kMeans.ViewModel
                 }
                 IsWorking = true;
                 IsEnableToPress = false;
-                List<ClassModel> list = new List<ClassModel>();
                 await Task.Run(() => 
                 {
                     var model = new PointsModel(pointsCountNum, classCountNum);
                     list = model.Execute();
                 });
-                await Task.Delay(1000);
-                ImageSource = await Task.FromResult(Draw(list));
+                var imageTemp = await Dispatcher.CurrentDispatcher.InvokeAsync(Draw, DispatcherPriority.Background);
+                await Task.Delay(200);
+                ImageSource = imageTemp;
                 IsEnableToPress = true;
                 IsWorking = false;
             }));
         }
 
+
+        private List<ClassModel> list;
 
         private string classCount;
 
@@ -171,12 +174,12 @@ namespace kMeans.ViewModel
         }
 
 
-        private ImageSource Draw(List<ClassModel> classes)
+        private ImageSource Draw()
         {
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(1000, 1000, 120, 96, PixelFormats.Default);
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(770, 570, 90, 90, PixelFormats.Default);
             DrawingVisual drawing = new DrawingVisual();
             DrawingContext drawingContext = drawing.RenderOpen();
-            foreach (var currentClass in classes)
+            foreach (var currentClass in list)
             {
                 var brush = new SolidColorBrush(currentClass.ClassColor);
                 var pen = new Pen(brush, 3);

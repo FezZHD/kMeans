@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,23 +23,36 @@ namespace kMeans.ViewModel
                 { 
                     return;
                 }
-                IsWorking = true;
                 IsEnableToPress = false;
+                IsWorking = true;
+                Tuple<List<ClassModel>, List<Points>> result = null;
+                var model = new PointsModel(pointsCountNum, classCountNum);
                 await Task.Run(() => 
                 {
-                    var model = new PointsModel(pointsCountNum, classCountNum);
-                    list = model.Execute();
+                    result = model.ExecuteFirstDrawing();
                 });
-                var imageTemp = await Dispatcher.CurrentDispatcher.InvokeAsync(Draw, DispatcherPriority.Background);
                 await Task.Delay(200);
-                ImageSource = imageTemp;
-                IsEnableToPress = true;
+                ImageSource = await Task.FromResult(Draw(result.Item1));
+                Tuple<List<ClassModel>, bool> redrawResult = null;
+                while (true)
+                {
+                    await Task.Run(() =>
+                    {
+                        redrawResult = model.RedrawPoints(result.Item2, result.Item1);
+                    });
+                    if (!redrawResult.Item2)
+                    {
+                        break;
+                    }
+                    ImageSource = await Task.FromResult(Draw(redrawResult.Item1));
+                    await Task.Delay(200);
+                }
                 IsWorking = false;
+                IsEnableToPress = true;
             }));
         }
 
 
-        private List<ClassModel> list;
 
         private string classCount;
 
@@ -174,7 +188,7 @@ namespace kMeans.ViewModel
         }
 
 
-        private ImageSource Draw()
+        private ImageSource Draw(List<ClassModel> list)
         {
             RenderTargetBitmap bitmap = new RenderTargetBitmap(770, 570, 90, 90, PixelFormats.Default);
             DrawingVisual drawing = new DrawingVisual();
